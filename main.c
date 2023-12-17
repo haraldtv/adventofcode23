@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
+#include <sys/mman.h>
 
-typedef struct List {
-    int rows;
-    int columns;
-}list;
+#include "headers/dec1.h"
 
+/*
 int readInput(list *flist) {
     char c;
     flist->rows = 0;
@@ -45,8 +45,32 @@ int readInput(list *flist) {
 
 }
 
+void december1() {
+  list flist;
+  readInput(&flist);
+  char *strings;
+  strings = malloc(flist.rows * flist.columns * sizeof(char));
+  int i, j  = 0;
+  char c;
+  
+  FILE *fptr;
+  fptr = fopen("files/dec1_input.txt", "r");
+
+  for (c = getc(fptr); c != EOF; c = getc(fptr)) {
+    if (c == '\n') {
+      i++;
+    }
+    strings[i+j] = c;
+    j++;
+    
+  }
+  for (i=0;i<flist.rows;i++) {
+    printf("%s\n", )
+  }
+}
+*/
+
 int main() {
-    list flist;
-    readInput(&flist);
-    return 0;
+  dec1();
+  return 0;
 }
