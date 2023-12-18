@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-#include <sys/mman.h>
 
 #include "headers/dec1.h"
 
