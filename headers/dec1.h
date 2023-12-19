@@ -1,4 +1,6 @@
-#define FERROR "Error reading file"
+#define FERROR "Error: Could not read file\n"
+#define RERROR "Error: No row count\n"
+#define CERROR "Error: columns not allocated\n"
 
 typedef struct Filelist {
   int rows;
