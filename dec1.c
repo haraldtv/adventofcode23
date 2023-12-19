@@ -3,10 +3,12 @@
 #include <string.h>
 #include <stdint.h>
 #include <time.h>
+#include <ctype.h>
 
 #include "headers/dec1.h"
 
-#define INPUTFILE "files/dec1_sample.txt"
+#define INPUTFILE "files/dec1_input.txt"
+#define ASCIICONVERTINT 48
 
 int readinput(filelist *flist) {
   
@@ -37,8 +39,6 @@ uint8_t rowcount(char *FILENAME, int *count) {
 }
 
 int allocateFileMemory(filelist *flist, char *FILENAME) {
-  printf("%d\n", flist->rows);
-
   register int i, j;
 
   int count = 0;
@@ -85,9 +85,9 @@ int readFile(filelist *flist, char *FILENAME) {
   FILE *fptr;
   fptr = fopen(FILENAME, "r");
 
-  // Allocate enough memory to store all the characters in a line
-  for (c = getc(fptr); c != EOF; c = getc(fptr)) {
-    if (c == '\n') {
+  do{
+    c = getc(fptr);
+    if ((c == '\n') || (c == EOF)) {
       flist->columnSize[count] = charcount;
       count += 1;
       charcount = 0;
@@ -96,7 +96,7 @@ int readFile(filelist *flist, char *FILENAME) {
       flist->columns[count][charcount] = c;
       charcount += 1;
     }
-  }
+  } while (c != EOF);
   count += 1;
 
   fclose(fptr);
@@ -111,25 +111,50 @@ void dec1() {
   start = clock();
   printf("Returncode: %d\n", rowcount(INPUTFILE, &flist.rows));
   end = clock();
-  printf("%d\n", flist.rows);
+  printf("flist.rows: %d\n", flist.rows);
 
   cpu_time_used = ( (double) (end - start)) / CLOCKS_PER_SEC;
   printf("Execution time: %f s\n", cpu_time_used);
 
   allocateFileMemory(&flist, INPUTFILE);
   readFile(&flist, INPUTFILE);
-  printf("%c\n", flist.columns[1][0]);
-  printf("%d\n", flist.columnSize[0]);
 
-  int8_t sum;
+  int64_t sum = 0;
   int i, j;
   int first, last;
 
+  printf("Debugging info\n");
+  printf("--------\n");
+  printf("flist.rows: %d\n", flist.rows);
+
+  printf("Row length:\n");
+  for (i=0; i<flist.rows; i++) {
+    printf("flist.columnSize[%d]: %d\n", i, flist.columnSize[i]);
+  }
+
   for (i=0; i<flist.rows; i++) {
     for (j=0; j<flist.columnSize[i]; j++) {
-
+      if (isdigit(flist.columns[i][j])) {
+        printf("Digit [%d][%d]: %d\n", i, j, ((flist.columns[i][j] - ASCIICONVERTINT)*10));
+        printf("flist.columns[%d][%d]: %d\n", i, j, (flist.columns[i][j]));
+        sum += ((flist.columns[i][j] - ASCIICONVERTINT) * 10);
+        printf("Sum: %d\n", sum);
+        break;
+      }
+    }
+    for (j = (flist.columnSize[i] -1); j>=0; j--) {
+      if (isdigit(flist.columns[i][j])) {
+        printf("Digit [%d][%d]: %d\n", i, j, (flist.columns[i][j] - ASCIICONVERTINT));
+        printf("flist.columns[%d][%d]: %d\n", i, j, (flist.columns[i][j]));
+        sum += (flist.columns[i][j] - ASCIICONVERTINT);
+        printf("Sum: %d\n", sum);
+        break;
+      }
     }
   }
+  printf("--------\n");
+
+  printf("Total sum: %d\n", sum);
 
 
   freeMemoryForFilelist(&flist);
