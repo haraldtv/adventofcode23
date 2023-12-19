@@ -39,11 +39,7 @@ uint8_t rowcount(char *FILENAME, int *count) {
 }
 
 int allocateFileMemory(filelist *flist, char *FILENAME) {
-  register int i, j;
-
-  int count = 0;
-  int charcount = 0;
-  char c;
+  register int i;
 
   FILE *fptr;
   fptr = fopen(FILENAME, "r");
@@ -76,8 +72,6 @@ void freeMemoryForFilelist(filelist *myFilelist) {
 }
 
 int readFile(filelist *flist, char *FILENAME) {
-  register int i, j;
-
   int count = 0;
   int charcount = 0;
   char c;
@@ -103,7 +97,7 @@ int readFile(filelist *flist, char *FILENAME) {
   return 0;
 }
 
-void dec1() {
+void dec1(void) {
   clock_t start, end;
   double cpu_time_used;
 
@@ -119,9 +113,8 @@ void dec1() {
   allocateFileMemory(&flist, INPUTFILE);
   readFile(&flist, INPUTFILE);
 
-  int64_t sum = 0;
+  int sum = 0;
   int i, j;
-  int first, last;
 
   printf("Debugging info\n");
   printf("--------\n");

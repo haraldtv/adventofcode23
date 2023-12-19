@@ -11,7 +11,10 @@
                 "${file}",
                 "dec1.c",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${fileDirname}/${fileBasenameNoExtension}",
+                "-Wall",
+                "-Werror",
+                "-Wpedantic"
             ],
             "options": {
                 "cwd": "${fileDirname}"

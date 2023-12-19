@@ -69,7 +69,7 @@ void december1() {
 }
 */
 
-int main() {
+int main(int argc, char **argv) {
   dec1();
   return 0;
 }
